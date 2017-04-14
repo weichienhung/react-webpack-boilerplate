@@ -12,10 +12,8 @@ var replaceInFile = function (srcPath, dstPath, toReplace, replacement) {
       return replacement
   };
   var str = fs.readFileSync(srcPath, 'utf8');
-  console.log('readfile done')
   var out = str.replace(new RegExp(toReplace, 'g'), replacer);
   fs.writeFileSync(dstPath, out);
-  console.log('write file done');
 };
 
 var config = {

@@ -1,7 +1,7 @@
 {
   "name": "fillme",
   "version": "1.0.0",
-  "description": "lottery frontend module by webpack",
+  "description": "simple react-webpack boilerplate",
   "main": "index.js",
   "scripts": {
     "clean": "rm -rf build && mkdir build",
