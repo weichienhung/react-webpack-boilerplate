@@ -1,70 +1,101 @@
-var webpack = require('webpack');
-var path = require('path');
-var ExtractTextPlugin = require('extract-text-webpack-plugin');
-var fs = require('fs');
-var BUILD_DIR = path.resolve(__dirname, 'build');
-var APP_DIR = path.resolve(__dirname, 'app');
-var env = process.env.NODE_ENV;
+const webpack = require('webpack');
+const path = require('path');
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const fs = require('fs');
+const BUILD_DIR = path.resolve(__dirname, 'build');
+const APP_DIR = path.resolve(__dirname, 'app');
+const env = process.env.NODE_ENV;
 
-var replaceInFile = function (srcPath, dstPath, toReplace, replacement) {
-  var replacer = function (match) {
-      console.log('Replacing %s => %s', match, replacement);
-      return replacement
+const replaceInFile = (srcPath, dstPath, toReplace, replacement) => {
+  const replacer = (match) => {
+    console.log('Replacing %s => %s', match, replacement);
+    return replacement;
   };
-  var str = fs.readFileSync(srcPath, 'utf8');
-  var out = str.replace(new RegExp(toReplace, 'g'), replacer);
+  const str = fs.readFileSync(srcPath, 'utf8');
+  const out = str.replace(new RegExp(toReplace, 'g'), replacer);
   fs.writeFileSync(dstPath, out);
 };
 
-var config = {
+
+const config = {
   devtool: 'source-map',
   entry: {
-    bundle: [ APP_DIR + '/index.jsx' ],
+    bundle: [`${APP_DIR}/index.jsx`],
     vendors: ['react', 'moment']
   },
   output: {
     path: BUILD_DIR,
     filename: '[name]-[hash].js'
   },
-  module : {
-    loaders : [
+  module: {
+    rules: [
       {
-        test : /\.jsx?/,
-        include : APP_DIR,
-        loaders: ['babel'],
+        test: /\.jsx?/,
+        include: APP_DIR,
+        use: ['react-hot', 'babel'],
       },
       {
         test: /\.(scss|css)$/,
-        loader: ExtractTextPlugin.extract('style', 'css?sourceMap!sass?sourceMap')
+        use: ExtractTextPlugin.extract({
+          fallback: 'style',
+          use: ['css', 'sass']
+        })
       },
       {
         test: /\.(jpe?g|png|gif|svg)$/i,
-        loaders: [
-          'file?hash=sha512&digest=hex&name=[hash].[ext]',
-          'image-webpack?bypassOnDebug&optimizationLevel=7&interlaced=false',
+        use: [
+          {
+            loader: 'file',
+            options: {
+              query: {
+                hash: 'sha512',
+                digest: 'hex',
+                name: 'name=[hash].[ext]'
+              }
+            }
+          },
+          {
+            loader: 'image-webpack',
+            options: {
+              query: {
+                mozjpeg: {
+                  progressive: true,
+                },
+                gifsicle: {
+                  interlaced: true,
+                },
+                optipng: {
+                  optimizationLevel: 7,
+                }
+              }
+            }
+          }
         ]
       }
     ]
   },
-  resolve: {
-    extensions: ['', '.js','.jsx']
+  resolveLoader: {
+    moduleExtensions: ['-loader']
   },
-  plugins : [
-    new webpack.optimize.CommonsChunkPlugin("vendors", "vendors-[hash].js"),
+  resolve: {
+    extensions: ['.js', '.jsx']
+  },
+  plugins: [
+    new webpack.optimize.CommonsChunkPlugin({ name: 'vendors', filename: 'vendors-[hash].js' }),
     new ExtractTextPlugin('[name]-[hash].css'),
     new webpack.optimize.UglifyJsPlugin({
-        sourceMap: false,
-        mangle: false,
-        compress: {
-            warnings: false
-        }
+      sourceMap: false,
+      mangle: false,
+      compress: {
+        warnings: false
+      }
     }),
     new webpack.DefinePlugin({
       'process.env.NODE_ENV': JSON.stringify(env)
     }),
     function() {
-      this.plugin("done", function(stats) {
-        var hash = stats.hash; // Build's hash, found in `stats` since build lifecycle is done.
+      this.plugin('done', (stats) => {
+        const hash = stats.hash; // Build's hash, found in `stats` since build lifecycle is done.
         replaceInFile(path.join(__dirname, 'index.prd.template.html'),
           path.join(BUILD_DIR, 'index.html'),
           '\\[hash\\]',
