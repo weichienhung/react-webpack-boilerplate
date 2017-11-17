@@ -23,8 +23,7 @@ const config = {
     rules: [
       {
         test: /\.jsx?/,
-        include: APP_DIR,
-        use: ['react-hot', 'babel'],
+        use: ['react-hot/webpack', 'babel'],
       },
       {
         test: /\.(scss|css)$/,
