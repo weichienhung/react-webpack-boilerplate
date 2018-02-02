@@ -21,7 +21,7 @@ const config = {
   devtool: 'source-map',
   entry: {
     bundle: [`${APP_DIR}/index.jsx`],
-    vendors: ['react', 'moment']
+    vendors: ['react', 'react-dom', 'prop-types']
   },
   output: {
     path: BUILD_DIR,
@@ -31,14 +31,14 @@ const config = {
     rules: [
       {
         test: /\.jsx?/,
-        include: APP_DIR,
-        use: ['react-hot', 'babel'],
+        use: ['babel'],
+        exclude: [/node_modules/]
       },
       {
-        test: /\.(scss|css)$/,
+        test: /\.css$/,
         use: ExtractTextPlugin.extract({
           fallback: 'style',
-          use: ['css', 'sass']
+          use: ['css']
         })
       },
       {

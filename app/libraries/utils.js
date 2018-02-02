@@ -1,5 +1,3 @@
-import moment from 'moment';
-
 const possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
 
 export function randomString(len = 18) {

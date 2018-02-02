@@ -1,12 +1,14 @@
-import React, { PropTypes } from 'react';
-import moment from 'moment';
+import React from 'react';
+import styled from 'styled-components';
 
-require('../stylesheets/app.scss');
+const HelloWorld = styled.div`
+  color: red;
+`;
 
 class App extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {}
+    this.state = {};
   }
 
   componentDidMount() {
@@ -14,9 +16,7 @@ class App extends React.Component {
 
   render() {
     return (
-      <div>
-        Hello world   
-      </div>
+      <HelloWorld>Hello World</HelloWorld>
     );
   }
 }

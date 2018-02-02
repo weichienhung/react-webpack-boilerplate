@@ -8,11 +8,10 @@ const env = process.env.NODE_ENV;
 const config = {
   entry: {
     bundle: [
-      'webpack-dev-server/client?http://0.0.0.0:8080',
-      'webpack/hot/only-dev-server',
+      'babel-polyfill',
+      'react-hot-loader/patch',
       `${APP_DIR}/index.jsx`],
-    vendors: ['react']
-
+    vendors: ['react', 'react-dom', 'prop-types']
   },
   output: {
     path: BUILD_DIR,
@@ -23,11 +22,12 @@ const config = {
     rules: [
       {
         test: /\.jsx?/,
-        use: ['react-hot/webpack', 'babel'],
+        use: ['babel'],
+        exclude: [/node_modules/]
       },
       {
-        test: /\.(scss|css)$/,
-        use: ['style', 'css', 'sass']
+        test: /\.css$/,
+        use: ['style', 'css']
       },
       {
         test: /\.(jpe?g|png|gif|svg)$/i,
@@ -78,6 +78,7 @@ const config = {
   },
   plugins: [
     new webpack.optimize.CommonsChunkPlugin({ name: 'vendors', filename: 'vendors.js' }),
+    new webpack.NamedModulesPlugin(),
     new webpack.HotModuleReplacementPlugin(),
     new webpack.DefinePlugin({
       'process.env.NODE_ENV': JSON.stringify(env)

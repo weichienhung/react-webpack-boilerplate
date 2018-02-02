@@ -1,19 +1,32 @@
 import React from 'react';
 import { render } from 'react-dom';
+import { AppContainer } from 'react-hot-loader';
 
-import App from './components/App'
+import App from './components/App';
 
 const appNode = document.getElementById('app');
 
-if (appNode) {
+const renderApp = Component => {
   render(
-    <App/>,
+    <AppContainer>
+      <Component />
+    </AppContainer>,
     appNode
   );
+}
+
+if (appNode) {
+  renderApp(App);
 } else {
   console.log('Cannot find a node with id app to mount.');
 }
 
 
+// Webpack Hot Module Replacement API
+if (module.hot) {
+  module.hot.accept('./components/App', () => {
+    renderApp(App);
+  });
+}
 
 
