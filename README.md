@@ -1,3 +1,3 @@
 # How to use
 
-My quick setup react-webpack project.
+My quick setup project of reactjs with styled-component. Using webpack4 to build.
