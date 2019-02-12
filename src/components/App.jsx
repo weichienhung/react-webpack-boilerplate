@@ -1,38 +1,46 @@
 import React from 'react';
 import { hot } from 'react-hot-loader';
-
-import styled from 'styled-components';
-
-const Mybtn = styled.button`
-  color: red;
-`;
+import CounterDisplay from './CounterDisplay';
+import { Provider } from '../context';
 
 export default
 @hot(module)
 class App extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {};
-    this.onClick = this.onClick.bind(this);
+    this.state = {
+      counter: {
+        count: 0,
+        loaded: true,
+        inc: this.inc.bind(this)
+      }
+    }
   }
 
-  componentDidMount() {
-  }
+  inc() {
+    this.setState(({counter})=>({
+      counter: {
+        ...counter,
+        loaded: false
+      }
+    }));
 
-  onClick() {
-    this.props.counterAdd({});
+    setTimeout(() => {
+      this.setState(({counter})=>({
+        counter: {
+          ...counter,
+          loaded: true,
+          count: counter.count+1
+        }
+      }));
+    }, 3000);
   }
 
   render() {
     return (
-      <div>
-        {this.props.counter.loaded && this.props.counter.count}
-        {!this.props.counter.loaded && 'loading' }
-        <Mybtn
-          onClick={this.onClick}
-        >Clickme</Mybtn>
-        &nbsp;
-      </div>
+      <Provider value={this.state.counter}>
+        <CounterDisplay />
+      </Provider>
     );
   }
 }
