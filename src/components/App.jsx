@@ -6,7 +6,7 @@ const RedDiv = styled.div`
   color: red;
 `;
 
-const App:React.FC = ():React.ReactElement =>  {
+const App = () =>  {
   return (
     <RedDiv>
       <span>Hello World</span>

@@ -7,8 +7,6 @@ module.exports = {
     "extends": [
         "eslint:recommended",
         "plugin:react/recommended",
-        "plugin:@typescript-eslint/eslint-recommended",
-        "plugin:@typescript-eslint/recommended"
     ],
     "globals": {
         "Atomics": "readonly",
@@ -35,7 +33,6 @@ module.exports = {
         "arrow-parens": [2, "as-needed"],
         "no-param-reassign": [2, { props: false }],
         "import/prefer-default-export": 0,
-        "@typescript-eslint/no-var-requires": 0,
         "react/prop-types": 0,
         "react/no-array-index-key": 0,
         "react/destructuring-assignment": 0,

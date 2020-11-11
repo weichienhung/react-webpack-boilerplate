@@ -5,11 +5,11 @@ const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 
 module.exports = {
   entry: {
-    main: './src/index.tsx'
+    main: './src/index.js'
   },
   mode: 'development',
   resolve: {
-    extensions: ['.ts', '.tsx', '.js'],
+    extensions: ['.js', '.jsx'],
   },
   output: {
     path: path.join(__dirname, '/dist'),
@@ -27,9 +27,10 @@ module.exports = {
   },
   module: {
     rules: [
-      {
-        test: /\.tsx?$/,
-        loader: 'awesome-typescript-loader',
+      {        
+        test: /\.jsx?/,        
+        exclude: /node_modules/,        
+        use: ['babel-loader'],      
       },
       {
         test: /\.css$/,
